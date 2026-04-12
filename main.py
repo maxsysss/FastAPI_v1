@@ -16,6 +16,16 @@ def read_root():
     return {"Message": "Hello World"};
 
 # Define a path parameter endpoint
+#@app.get("/items/{item_id}")
+#def read_item(item_id: int):
+#    return {"item_id": item_id}
+
+#Define a path parameter endpoint
 @app.get("/items/{item_id}")
-def read_item(item_id: int):
-    return {"item_id": item_id}
+def read_item(item_id: int, q: str = None):
+    return {"item_id": item_id, "q": q}
+
+#Define a POST endpoint with request body
+@app.post("/items")
+def create_item(item: Item):
+    return item
