@@ -1,6 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException, status;
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 import secrets
+from fastapi import Header;
+
+API_KEY = "mysecureapikey";
 
 app = FastAPI();
 
@@ -22,3 +25,11 @@ def basic_auth(credentials: HTTPBasicCredentials = Depends(security)):
             headers={"WWW-Authenticate":"Basic"},
         )
     return {"message": f"Welcome {credentials.username}"}
+
+@app.get("/apikey-auth")
+def apikey_auth(x_api_key: str = Header(...)): #Header(...) é uma função do FastAPI usada para extrair valores dos cabeçalhos HTTP da requisição
+    if x_api_key != API_KEY:
+        raise HTTPException(
+            status_code=401, detail="Invalid API Key"
+        )
+    return {"message": "API Key authenticated!"}
